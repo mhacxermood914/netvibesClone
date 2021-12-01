@@ -1,0 +1,36 @@
+<div class="h-20 shadow-md">
+    <nav class="h-full w-1/2 mx-auto">
+        <ul class="flex justify-end space-x-8 items-center h-full text-xl">
+            <li><a href="#">Offres</a></li>
+            <li><a href="">Tarifs</a></li>
+            <li><a href="">Blog</a></li>
+            <li class=""><a href="">Se connecter</a></li>
+            <li class="register py-2 px-6 rounded-md text-white" id="registerBtn"><a href="">S'inscrire</a></li>
+        </ul>
+    </nav>
+</div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal h-screen">
+
+    <!-- Modal content -->
+    <div class="modal-content w-1/4 h-5/6">
+        <div class="flex justify-end"><span class="close">&times;</span></div>
+
+        <div>
+            <form method="post" action="auth/register">
+                <div>
+                    <label for="" class="block">E-mail</label>
+                    <input type="email" name="email" class="w-full border-2 p-2 rounded-md outline-none" />
+                </div>
+                <div> 
+                    <label for="" class="block">Password</label>
+                    <input type="password" name="password" class="w-full border-2 p-2 rounded-md outline-none " />
+                    <button class="btn-register w-full p-2 rounded-md mt-4 text-white">S'inscrire</button>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+
+</div>
