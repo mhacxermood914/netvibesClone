@@ -2,7 +2,6 @@ const UserServices = require("../services/users");
 const { hash, compare } = require('./../lib/bcrypt')
 const { token } = require('../lib/token')
 const validator = require('./../lib/validate')
-
 const Login = (req, res) => {
   res.send();
 };
@@ -30,14 +29,14 @@ const Register = async (req, res) => {
   //create token
 
   const jwt = await token(email)
-  
+
   //Encrypt password
 
   const encryptedPassword = await hash(password)
 
   UserServices.createUser({ email, encryptedPassword, jwt });
   res.json({ email, encryptedPassword, jwt });
-  
+
 };
 
 const getAllUsers = (req, res, next) => {
