@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "ajv": "^8.8.2",
+    "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "cookie-session": "^1.4.0",
@@ -17,6 +18,7 @@
     "express": "~4.16.1",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.2",
+    "googleapis": "^92.0.0",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
@@ -25,6 +27,7 @@
     "passport": "^0.5.0",
     "passport-google-oauth": "^2.0.0",
     "passport-local": "^1.0.0",
+    "querystring": "^0.2.1",
     "sequelize": "^6.12.0-alpha.1",
     "validator": "^13.7.0"
   }

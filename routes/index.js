@@ -6,9 +6,13 @@ var router = express.Router();
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express", userInfo: "" });
 });
-router.get('/dashboard', (req, res) => {
-  console.log(req.isAuthenticated())
-  res.render('dashboard')
+
+router.get('/dashboard', ensureAuth, (req, res,next) => {
+  //console.log(req.cookies)
+
+  res.end('cool')
+  // console.log(req.logout())
+  // res.render('dashboard')
 
 })
 

@@ -4,6 +4,7 @@ const expressLayouts = require("express-ejs-layouts");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+
 const logger = require("morgan");
 const db = require("./config/db");
 const session = require('express-session')
@@ -21,17 +22,19 @@ try {
 } catch (error) {
   console.error('Unable to connect to the database:', error);
 }
+//
+app.use(cookieParser())
 
-//setup session
+// //setup session
 
-app.use(session({
-  name:"google-oauth",
-  resave: false,
-  saveUninitialized: true,
-  secret: 'SECRET'
-}));
+// app.use(session({
+//   name:"user",
+//   resave: false,
+//   saveUninitialized: true,
+//   secret: 'SECRET'
+// }));
 
-
+const data = ["a","rz"]
 // view engine setup
 app.use(expressLayouts);
 app.set("layout", "./layouts/main");
@@ -44,37 +47,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 //setup passport
-app.use(passport.initialize());
-app.use(passport.session());
-require("./config/passport");
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use('/', require('./routes'));
 app.use('/auth', require('./routes/auth'));
 app.use('/api/auth', require('./routes/api/auth'));
 
-// app.use(function (req, res, next) {
-//   res.locals.login = req.isAuthenticated();
-//   next();
-// });
-
-// app.get("/dashboard",  (req, res) => {
-//   console.log(req.user)
-//   res.send('cpool')
-// })
-
-
-
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
-
-app.get("/logout", (req, res) => {
-  req.session = null;
-  req.logout();
-  res.redirect('/');
-})
 
 // error handler
 app.use(function (err, req, res, next) {
