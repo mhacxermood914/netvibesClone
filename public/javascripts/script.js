@@ -49,10 +49,10 @@ loaded()
 
 try {
 
-    if(loginBtn || registerBtn){
+    if (loginBtn || registerBtn) {
         loginBtn.addEventListener('click', handleLoginModal);
         registerBtn.addEventListener('click', handleRegisterModal)
-    
+
         close.forEach(e => {
             e.addEventListener('click', handleCloseModal);
         });
@@ -62,21 +62,22 @@ try {
 
 
     const registerForm = document.getElementById('register')
+    const loginForm = document.getElementById('login')
 
-    if(registerForm){
+    if (registerForm || loginForm) {
 
         registerForm.addEventListener('submit', (e) => {
-    
+
             e.preventDefault()
-    
+
             const target = e.target
-    
+
             const data = { email: target.elements['email'].value, password: target.elements['password'].value }
-    
+
             const error_message_span = $('.error-message'),
                 pass_error = $('.password-error-message'),
                 email_error = $('.email-error-message')
-    
+
             //POST request with body equal on data in JSON format
             fetch('/api/auth/register', {
                 method: 'POST',
@@ -102,9 +103,9 @@ try {
                 })
                 //Then with the error genereted...
                 .catch((error) => {
-    
+
                     console.log(error.toString().includes('password'))
-    
+
                     if (error.toString().includes('password')) {
                         $(pass_error).removeClass('hidden')
                         $(pass_error).html(error)
@@ -116,83 +117,80 @@ try {
                         $(error_message_span).removeClass('hidden')
                         $(error_message_span).html(error)
                     }
-    
-    
-    
-    
+
+
+
+
                 })
-    
-    
+
+
+        })
+
+        loginForm.addEventListener('submit', (e) => {
+
+            e.preventDefault()
+
+            const target = e.target
+
+            const data = { email: target.elements['email'].value, password: target.elements['password'].value }
+
+            const error_message_span = $('.error-login-message'),
+                pass_error = $('.password-login-error-message'),
+                email_error = $('.email-login-error-message')
+
+            //POST request with body equal on data in JSON format
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    if (response.status != 200) {
+                        throw Error(response.statusText)
+                    }
+                    return response
+                })
+                //Then with the data from the response in JSON...
+                .then((data) => {
+
+                    if (data) {
+
+                        location.replace(data.url.includes('admin') ? '/admin' : 'services')
+
+                    }
+                })
+                //Then with the error genereted...
+                .catch((error) => {
+
+                    console.log(error.toString().includes('password'))
+
+                    if (error.toString().includes('password')) {
+                        $(pass_error).removeClass('hidden')
+                        $(pass_error).html(error)
+                    } else if (error.toString().includes('email')) {
+                        $(email_error).removeClass('hidden')
+                        $(pass_error).addClass('hidden')
+                        $(email_error).html(error)
+                    } else {
+                        $(email_error).addClass('hidden')
+                        $(pass_error).addClass('hidden')
+                        $(error_message_span).removeClass('hidden')
+                        $(error_message_span).html(error)
+                    }
+
+
+
+
+                })
+
+
         })
 
     }
 
 
-    const loginForm = document.getElementById('login')
-
-    console.log(loginForm)
-
-    loginForm.addEventListener('submit', (e) => {
-
-        e.preventDefault()
-
-        const target = e.target
-
-        const data = { email: target.elements['email'].value, password: target.elements['password'].value }
-
-        const error_message_span = $('.error-login-message'),
-            pass_error = $('.password-login-error-message'),
-            email_error = $('.email-login-error-message')
-
-        //POST request with body equal on data in JSON format
-        fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => {
-                if (response.status != 200) {
-                    throw Error(response.statusText)
-                }
-                return response
-            })
-            //Then with the data from the response in JSON...
-            .then((data) => {
-
-                if (data) {
-
-                    location.replace(data.url.includes('admin')?'/admin':'services')
-                    
-                }
-            })
-            //Then with the error genereted...
-            .catch((error) => {
-
-                console.log(error.toString().includes('password'))
-
-                if (error.toString().includes('password')) {
-                    $(pass_error).removeClass('hidden')
-                    $(pass_error).html(error)
-                } else if (error.toString().includes('email')) {
-                    $(email_error).removeClass('hidden')
-                    $(pass_error).addClass('hidden')
-                    $(email_error).html(error)
-                } else {
-                    $(email_error).addClass('hidden')
-                    $(pass_error).addClass('hidden')
-                    $(error_message_span).removeClass('hidden')
-                    $(error_message_span).html(error)
-                }
-
-
-
-
-            })
-
-
-    })
 
 } catch (e) {
     console.log(e)

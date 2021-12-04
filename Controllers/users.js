@@ -86,7 +86,7 @@ const Login = async (req, res) => {
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CONSUMER_KEY,
   process.env.GOOGLE_CONSUMER_SECRET,
-  `http://localhost:3000/auth/google/callback`,
+  `http://localhost:8080/auth/google/callback`,
 );
 
 const getGoogleAuthURL = () => {

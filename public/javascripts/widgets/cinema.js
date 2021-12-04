@@ -27,3 +27,7 @@ function createCinemaWidgetMovie(movieName) {
             this.grid.addWidget($(createElement), node.x, node.y, node.width, node.height)
         })
 }
+
+function getListOfCinema(){
+    
+}

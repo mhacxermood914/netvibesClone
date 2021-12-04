@@ -5,6 +5,6 @@ function add(service) {
 
 }
 
-function next(){
-    location.replace('http://localhost:3000/dashboard')
+function next() {
+    location.replace('http://localhost:8080/dashboard')
 }
