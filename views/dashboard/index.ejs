@@ -1,0 +1,105 @@
+<div 
+  x-data="{ openSideBar: true}"
+  class="h-screen"
+>
+  <!-- Nav header  -->
+  <nav class="bg-gray-800 flex items-center justify-between">
+    <div class="flex items-center justify-center space-x-2 text-white">
+      <button class="text-md bg-green-500 text-white font-medium p-2">Add</button>
+      <div class="flex space-x-2 text-white">
+        app <span class="material-icons">view_module</span>
+      </div>
+      <h2> reader</h2>
+    </div>
+    <div class="flex space-x-3 text-white pr-4">
+        <span class="material-icons">space_dashboard</span>
+        <div class="h-7 w-0.5 bg-gray-500"></div>
+        <h2 class="ml-">Dashboard</h2>
+        <div class="h-7 w-0.5 bg-gray-500"></div>
+        <div class="text-center flex items-center">
+          <span class="material-icons bg-green-500 p-0.5 mr-1.5">face</span>
+          John Doe
+        </div>
+    </div>
+  </nav>
+  <div class="flex h-full">
+    <!-- sidebar  -->
+    <section
+    x-show="openSideBar"
+    x-transition
+     class="h-full w-80 divide-y-2 divide-gray-600 bg-gray-700 h-full"
+    >
+        <h2 class="py-6 px-2 text-3xl font-semibold text-gray-400">My Dashboard</h2>
+        <div x-data="{ open: false, iconText: '' }">
+          <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+            <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
+            <span class="material-icons">edit</span>
+            <h2>Design</h2>
+          </button>
+          <div 
+            x-show="open" 
+            @click="open = !open" 
+            class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+          </div>
+        </div>
+        <div x-data="{ open: false, iconText: '' }">
+          <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+            <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
+            <span class="material-icons">edit</span>
+            <h2>Design</h2>
+          </button>
+          <div 
+            x-show="open" 
+            @click="open = !open" 
+            class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+          </div>
+        </div><div x-data="{ open: false, iconText: '' }">
+          <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+            <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
+            <span class="material-icons">edit</span>
+            <h2>Design</h2>
+          </button>
+          <div 
+            x-show="open" 
+            @click="open = !open" 
+            class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+          </div>
+        </div>
+    </section>
+
+    <!-- content wrapper  -->
+    <section class=" w-full">
+      <!-- head  -->
+      <div class="bg-gray-100 py-2 flex items-center space-x-3 text-xl">
+        <button @click="openSideBar = !openSideBar" class="appearance-none">
+          <span class="material-icons text-xl pl-2">menu</span>
+        </button>
+        <h2>Graphics Design Inspiration and Photoshop Design</h2>
+      </div>
+      <!-- content  -->
+      <div class="w-full grid grid-cols-4 gap-3 p-3 border-2 border-red-500">
+        <div class="h-80 shadow-md bg-green-200">1</div>
+        <div class="h-80 shadow-md bg-green-200">2</div>
+        <div class="h-80 shadow-md bg-green-200">3</div>
+        <div class="h-80 shadow-md bg-green-200">4</div>
+        <div class="h-80 shadow-md bg-green-200">1</div>
+        <div class="h-80 shadow-md bg-green-200">2</div>
+        <div class="h-80 shadow-md bg-green-200">3</div>
+        <div class="h-80 shadow-md bg-green-200">4</div>
+      </div>
+    </section>
+  </div>
+
+</div>

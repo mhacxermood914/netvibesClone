@@ -4,16 +4,21 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express", userInfo: "" });
+  res.render("index", { title: "Express", user: null });
 });
 
 router.get('/dashboard', ensureAuth, (req, res,next) => {
   //console.log(req.cookies)
+  res.render('dashboard', { title: "Express",user: req.cookies.user?true:false})
+  
+})
 
-  res.end('cool')
-  // console.log(req.logout())
-  // res.render('dashboard')
+router.get('/services',  (req, res,next) => {
+  res.render('dashboard/services', { user: req.user });
+})
 
+router.get('/interest',  (req, res,next) => {
+  res.render('dashboard/interest', { user: req.user });
 })
 
 // router.get("/logout", (req, res) => {

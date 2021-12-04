@@ -17,18 +17,21 @@
         <div class="flex justify-end"><span class="close cursor-pointer">&times;</span></div>
 
         <div>
-            <form method="post" action="auth/register">
+            <form method="post" id="login">
                 <div>
                     <label for="" class="block">E-mail</label>
                     <input type="email" name="email" class="w-full border-2 p-2 rounded-md outline-none" />
+                    <span class="email-login-error-message hidden text-red-400"></span>
                 </div>
                 <div> 
                     <label for="" class="block">Password</label>
                     <input type="password" name="password" class="w-full border-2 p-2 rounded-md outline-none " />
-                    <button class="bg-green-700 text-green-100 text-xl text-medium hover:bg-green-600 w-full p-2.5 rounded-md mt-4 text-white">Se connecter</button>
+                    <span class="password-login-error-message hidden text-red-400"></span>
+                    <span class="error-login-message hidden text-red-400"></span>
+                    <button class="bg-green-700 text-green-100 text-xl  text-center text-medium hover:bg-green-600 w-full p-2.5 rounded-md mt-4 text-white">Se connecter</button>
                     <div class="pt-6">
                         <h2 class="text-center">ou Connectez-vous</h2>
-                    <a href="/auth/signin/google" class="bg-red-500 text-red-100 text-xl font-medium hover:bg-red-600 w-full p-2.5 rounded-md mt-4 text-white">Google</a>
+                    <a href="/auth/signin/google" class="bg-red-500 block text-red-100 text-xl font-medium hover:bg-red-600 w-full p-2.5 rounded-md mt-4 text-center text-white">Google</a>
                     <button class="bg-blue-500 text-blue-100 text-xl font-medium hover:bg-blue-600 w-full p-2.5 rounded-md mt-4 text-white">Twitter</button>
 
                     </div>
@@ -45,19 +48,22 @@
         <div class="flex justify-end"><span class="close cursor-pointer">&times;</span></div>
 
         <div>
-            <form method="post" action="auth/register">
+            <form method="post" id="register">
                 <div>
                     <label for="" class="block">E-mail</label>
                     <input type="email" name="email" class="w-full border-2 p-2 rounded-md outline-none" />
+                    <span class="email-error-message hidden text-red-400"></span>
                 </div>
                 <div> 
                     <label for="" class="block">Password</label>
                     <input type="password" name="password" class="w-full border-2 p-2 rounded-md outline-none " />
-                    <button class="bg-green-700 text-green-100 text-xl text-medium hover:bg-green-600 w-full p-2.5 rounded-md mt-4 text-white">S'inscrire</button>
+                    <span class="password-error-message hidden text-red-400"></span>
+                    <span class="error-message hidden text-red-400"></span>
+                    <button id="register_submit"  class="bg-green-700 text-green-100 text-xl text-medium hover:bg-green-600 w-full p-2.5 rounded-md mt-4 text-white">S'inscrire</button>
                     <div class="pt-6">
                         <h2 class="text-center">ou Connectez-vous</h2>
-                    <a href="/auth/signin/google" class="bg-red-500 w-full text-red-100 text-xl font-medium hover:bg-red-600 w-full p-2.5 rounded-md mt-4 block text-center text-white">Google</a>
-                    <button class="bg-blue-500 text-blue-100 text-xl font-medium hover:bg-blue-600 w-full p-2.5 rounded-md mt-4 text-white">Twitter</button>
+                    <a href="/auth/signin/google" class="bg-red-500 w-full block text-red-100 text-xl font-medium hover:bg-red-600 w-full p-2.5 rounded-md mt-4 block text-center text-white">Google</a>
+                    <button role="button" class="bg-blue-500 text-blue-100 text-xl font-medium hover:bg-blue-600 w-full p-2.5 rounded-md mt-4 text-white">Twitter</button>
 
                     </div>
                 </div>

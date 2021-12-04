@@ -1,0 +1,90 @@
+<div class="min-h-screen w-full bg-gray-900">
+  <div class="max-w-5xl min-w-5xl mx-auto flex flex-col space-y-8 ">
+    <div class="text-gray-200 mt-8 mb-20">
+      <h2 class="text-5xl font-semibold  mb-4 text-center">Bienvenue sur Netvibes clones</h2>
+      <h4 class="text-xl text-center">Ajoutez du contenu a votre Dahsboard en deux etapes:</h4>
+    </div>
+
+    <div class="text-gray-300 w-96">
+      <h2>2. Entrez des mots-cles lies a vos centre d'interet: </h2>
+      <small class="text-gray-400 ">Pour obtenir des resultats pertinents, entrez des mots-cles en rapport avec ls thematique que vous avez selectionnees a l'etape 1.</small>
+    </div>
+
+    <div x-data="interestList"  >
+      <div class="w-full flex gap-x-2">
+        <div class="w-2/5">
+          <input x-model="element" type="email" name="email" class="w-full border-2 p-2 rounded-md outline-none" />
+        </div>
+        <button @click="add" class="p-2 text-green-100 border-2 bg-green-500 sborder-green-500 hover:bg-green-600 hover:border-green-600 rounded-md">Ajouter</button>
+      </div>
+      <div class="mt-1 flex gap-x-2">
+        <template x-for="(el, index) in datas" :key="index">
+          <div class="flex bg-green-500 p-1 text-2xs text-green-100 rounded-sm">
+            <p x-text="el" x-transition ></p>
+            <button @click="delete(index)" class="material-icons appearance-none hover:opacity-50">cancel</button>
+          </div>
+        </template>
+
+      </div>
+    </div>
+    <div class="w-full p-4 bg-gray-700 text-gray-200">
+      <h2>Ou Selectionnez-en parmi les plus populaires</h2>
+      <div class="mt-12">
+        <h4 class="uppercase text-sm mb-2">Categorie</h4>
+        <div class="flex space-x-2">
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+        </div>
+      </div>
+      <div class="mt-12">
+        <h4 class="uppercase text-sm mb-2">Categorie</h4>
+        <div class="flex space-x-2">
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+        </div>
+      </div>
+      <div class="mt-12">
+        <h4 class="uppercase text-sm mb-2">Categorie</h4>
+        <div class="flex space-x-2">
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+          <button class="p-1.5 border-2 border-gray-400 text-xs text-gray-400 hover:text-gray-200 hover:border-gray-200">News jeu</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="flex items-center justify-center mt-12">
+    <div>
+      <button class="px-6 py-3 text-green-500 border-2 border-green-500 hover:bg-green-500 hover:text-green-100">Reinitialiser</button>
+      <button class="px-5 py-3 text-green-100 border-2 bg-green-500 border-green-500 hover:bg-green-600 hover:border-green-600">Suivant</button>
+    </div>
+  </div>
+</div>
+
+<script>
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('interestList', () => ({
+          element: '',
+          datas: [],
+            add() {
+                if(this.element) {
+                  this.datas.push(this.element);
+                  console.log(this.datas);
+                  this.element = '';
+                }
+            },
+            delete(index) {
+              console.log(index);
+              this.datas = this.datas.filter((data, dataIndex) => {
+                return index !== dataIndex;
+              });
+            }   
+        }))
+    })
+</script>

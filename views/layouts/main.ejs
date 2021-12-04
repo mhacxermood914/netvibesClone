@@ -7,20 +7,25 @@
     </title>
     <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
-<body>
-    <main class="relative ">
+<body >
+    <main class="relative">
+        <% if(!user) { %> 
         <%- include('./partials/header.ejs') %>
-
+        <% } %> 
         <%- body %>
-
-        <%- include('./partials/footer.ejs') %>
+        <% if (!user) { %>
+            
+            <%- include('./partials/footer.ejs') %>
+        <% } %>
     </main>
 
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script> -->
-    <script src="/javascripts/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script defer src="/javascripts/script.js"></script>
 </body>
 
 </html>

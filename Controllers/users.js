@@ -4,8 +4,64 @@ const { token } = require('../lib/token')
 const validator = require('./../lib/validate')
 const axios = require('axios')
 const { google } = require('googleapis')
-const Login = (req, res) => {
-  res.send();
+const Login = async (req, res) => {
+
+  let hash, hash_pwd;
+
+  const { email, password } = req.body;
+
+  const data = { email, password }
+
+  //validate inputs
+  if (validator(data)) {
+
+    res.statusMessage = validator(data)
+
+    return res.status(401).end();
+  }
+
+  //check if user already exists
+
+  const oldUser = await UserServices.getUserBy(email)
+
+  if (oldUser) {
+
+    hash = await UserServices.getUserInfoBy(email, 'password')
+
+    hash = JSON.stringify(hash)
+
+    hash = JSON.parse(hash)
+
+    console.log({hash})
+
+    if (await compare(password, hash[0].password)) {
+
+      const jwt = await token(email)
+
+      res.cookie('user', jwt, { maxAge: 900000, httpOnly: true });
+
+      res.writeHead(302, {
+        'Location': '/dashboard' // This is your url which you want
+      });
+
+      res.statusMessage = "Authenticated successfully!!!"
+
+      return res.status(200).end()
+
+    }else{
+
+      res.statusMessage = "Password Incorrect"
+
+      return res.status(401).end()
+    }
+  } else {
+    res.statusMessage = "L'utilisateur n'existe pas"
+    return res.status(401).end()
+  }
+
+
+
+
 };
 
 const oauth2Client = new google.auth.OAuth2(
@@ -56,12 +112,12 @@ const handleGoogleAuthCallback = async (req, res) => {
       throw new Error(error.message);
     });
 
-  
+
 
   const { email } = googleUser
 
   const jwt = await token(email)
- 
+
   //check if user already exists
 
   const oldUser = await UserServices.getUserBy(email)
@@ -73,7 +129,7 @@ const handleGoogleAuthCallback = async (req, res) => {
     res.cookie('user', jwt, { maxAge: 900000, httpOnly: true });
 
     return res.status(200).redirect('/dashboard') //user authenticated
-    
+
   }
 
 
@@ -128,14 +184,22 @@ const Register = async (req, res) => {
 
   //validate inputs
 
-  if (validator(data)) return res.json(validator(data));
+  if (validator(data)){
+
+    res.statusMessage = validator(data)
+
+    return res.status(401).end();
+  } 
 
   //check if user already exists
 
   const oldUser = await UserServices.getUserBy(email)
 
   if (oldUser) {
-    return res.status(409).send("User Already Exist. Please Login");
+
+    res.statusMessage = "User Already Exist. Please Login";
+   
+    return res.status(400).end();
   }
 
   //create token
