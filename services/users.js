@@ -17,6 +17,11 @@ const getUserBy = async (key) => {
   return res
 }
 
+
+const getAllUsers = async ()=>{
+  const res = await User.findAll()
+  return res
+}
 const getUserInfoBy = async (key, attributes = true) => {
 
   
@@ -48,4 +53,5 @@ module.exports = {
   getUserInfoBy,
   updateUser,
   deleteUser,
+  getAllUsers
 };

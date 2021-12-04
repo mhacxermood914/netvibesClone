@@ -3,6 +3,7 @@ const createError = require("http-errors");
 const expressLayouts = require("express-ejs-layouts");
 const express = require("express");
 const path = require("path");
+const useragent = require('express-useragent');
 const cookieParser = require("cookie-parser");
 
 const logger = require("morgan");
@@ -22,6 +23,9 @@ try {
 } catch (error) {
   console.error('Unable to connect to the database:', error);
 }
+
+app.use(useragent.express());
+
 //
 app.use(cookieParser())
 
@@ -53,6 +57,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/', require('./routes'));
 app.use('/auth', require('./routes/auth'));
 app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api', require('./routes/api/users'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

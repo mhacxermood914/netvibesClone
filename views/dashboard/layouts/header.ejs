@@ -1,0 +1,26 @@
+<header class="flex justify-between items-center py-4 px-6 bg-white border-b-4 border-green-500">
+    <div class="flex items-center">
+        <div>
+            <button @click="sidebarOpen = true" class="text-gray-500  focus:outline-none lg:hidden">
+                <span class="material-icons">menu</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="flex items-center">
+        <div x-data="{ dropdownOpen: false }" class="relative">
+            <button @click="dropdownOpen = ! dropdownOpen" class="relative flex  overflow-hidden">
+                <h2>John Doe</h2>
+                <span class="material-icons">expand_more</span>
+            </button>
+
+            <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
+
+            <div x-show="dropdownOpen"
+                class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10">
+                <a href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
+            </div>
+        </div>
+    </div>
+</header>

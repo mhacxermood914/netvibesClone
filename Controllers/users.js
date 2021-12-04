@@ -1,11 +1,13 @@
 const UserServices = require("../services/users");
 const { hash, compare } = require('./../lib/bcrypt')
 const { token } = require('../lib/token')
+const email_validator = require('validator')
 const validator = require('./../lib/validate')
 const axios = require('axios')
 const { google } = require('googleapis')
-const Login = async (req, res) => {
 
+
+const Login = async (req, res) => {
   let hash, hash_pwd;
 
   const { email, password } = req.body;
@@ -38,11 +40,28 @@ const Login = async (req, res) => {
 
       const jwt = await token(email)
 
-      res.cookie('user', jwt, { maxAge: 900000, httpOnly: true });
+      if(email==="admin@gmail.com"){
+        
+        res.cookie('admin', jwt, { maxAge: 900000, httpOnly: true });
 
-      res.writeHead(302, {
-        'Location': '/dashboard' // This is your url which you want
-      });
+      }else{
+        res.cookie('user', jwt, { maxAge: 900000, httpOnly: true });
+
+      }
+
+
+      console.log(req.useragent.browser)
+
+      const url = email.toString().includes('admin') ? '/admin' : '/services'
+
+      console.log(url)
+
+      if (req.useragent.browser!="unknown"){
+        res.writeHead(302, {
+          'Location': url // This is your url which you want
+        });
+      }
+
 
       res.statusMessage = "Authenticated successfully!!!"
 
@@ -128,7 +147,7 @@ const handleGoogleAuthCallback = async (req, res) => {
 
     res.cookie('user', jwt, { maxAge: 900000, httpOnly: true });
 
-    return res.status(200).redirect('/dashboard') //user authenticated
+    return res.status(200).redirect('/services') //user authenticated
 
   }
 
@@ -215,9 +234,128 @@ const Register = async (req, res) => {
 
 };
 
-const getAllUsers = (req, res, next) => {
-  res.send("respond with a resource");
+
+const getAllUsers = async (req, res, next) => {
+  const usersList = await UserServices.getAllUsers()
+
+  if(!usersList){
+    return res.status(200).json({message:"There is no user in the database"})
+  }
+
+  return res.status(200).json({usersList})
 };
+
+// Au cas ou tu en auras besoin pour effectuer une action sinon le mail est unique
+
+const GetUserId = async (req, res, next) => {
+
+  const {email}=req.body
+
+  if (!email_validator.isEmail(email)){
+
+    return res.status(500).json('Send valid email')
+
+  }
+
+  const userInstance = await UserServices.getUserInfoBy(email,'id')
+
+  const user = JSON.stringify(userInstance)
+
+  console.log({userInstance})
+
+  if(!userInstance){
+
+    return res.status(400).json('Such user not found')
+
+  }
+
+  return res.status(200).json(userInstance)
+
+}
+
+const DeleteUser = async (req, res, next) => {
+
+  const {email}=req.body
+
+  if (!email_validator.isEmail(email)) {
+
+    return res.status(500).json('Send valid email')
+
+  }
+
+
+
+  const user = await UserServices.getUserBy(email)
+
+  if (!user) {
+    return res.status(200).json({ message: "There is no user with this mail in the database" })
+  }
+
+  const deleted = await user.destroy()
+
+  console.log({deleted})
+
+  return res.status(200).json("User successfully deleted")
+};
+
+const ModifyPassword = async (req, res, next) => {
+
+  const { email,password } = req.body
+
+  const data = { email, password }
+
+  
+
+  //validate inputs
+
+  if (validator(data)) {
+
+    res.statusMessage = validator(data)
+
+    return res.status(401).end();
+  }
+
+  // let encryptedPassword;
+
+  const encryptedPassword = await hash(password)
+
+  const user = await UserServices.getUserBy(email)
+
+  if (!user) {
+    return res.status(200).json({ message: "There is no user with this mail in the database" })
+  }
+
+  user.update({ password: encryptedPassword })
+ 
+  return res.status(200).json({password:encryptedPassword})
+
+};
+
+const ModifyEmail = async (req, res, next) => {
+
+  const { email,new_email } = req.body
+
+  if (!email_validator.isEmail(email) || !email_validator.isEmail(new_email)) {
+
+    return res.status(500).json('Send valid email')
+
+  }
+
+
+
+  const user = await UserServices.getUserBy(email)
+
+  if (!user) {
+    return res.status(200).json({ message: "There is no user with this mail in the database" })
+  }
+
+  user.update({email:new_email})
+
+  return res.status(200).json("User successfully updated the mail")
+};
+
+
+
 
 const getOneUser = (req, res, next) => {
   res.send("respond with a resource");
@@ -231,4 +369,8 @@ module.exports = {
   AuthenticateGoogleUser,
   handleGoogleAuthCallback,
   getOneUser,
+  GetUserId,
+  DeleteUser,
+  ModifyEmail,
+  ModifyPassword,
 };

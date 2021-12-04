@@ -2,6 +2,7 @@
   "name": "netvibes",
   "version": "0.0.0",
   "private": true,
+  "main": "app.js",
   "scripts": {
     "start": "nodemon ./app.js"
   },
@@ -18,8 +19,11 @@
     "express": "~4.16.1",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.2",
+    "express-useragent": "^1.0.15",
     "googleapis": "^92.0.0",
+    "gridstack": "^4.3.1",
     "http-errors": "~1.6.3",
+    "ip": "^1.1.5",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
