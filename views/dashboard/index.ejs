@@ -24,7 +24,7 @@
     <section v-show="openSideBar" x-transition class="h-full w-80 divide-y-2 text-md pr-8 text-white divide-gray-600 bg-gray-700 h-full">
       <h2 class="py-6 px-2 text-3xl font-semibold text-gray-400">ZeddVibes</h2>
       <div>
-        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+        <button  class="flex w-full text-gray-300 space-x-2 px-2 py-1">
           <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
           <h2>Weather Widget</h2>
         </button>
@@ -37,11 +37,11 @@
         </div>
       </div>
       <div >
-        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+        <button  class="flex w-full text-gray-300 space-x-2 px-2 py-1">
           <span v-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
           <h2>Exchange Widget</h2>
         </button>
-        <div v-show="open" @click="open = !open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+        <div v-show="open"  class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
           <button @click="add('exchange_rate')" class="hover:bg-gray-800 p-1 text-left w-full">Display the exchange rate of a currency pair M1 /
             M2</button>
           <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the evolution of the price of an A
@@ -51,11 +51,11 @@
         </div>
       </div>
       <div >
-        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+        <button  class="flex w-full text-gray-300 space-x-2 px-2 py-1">
           <span v-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
           <h2>Youtube Widget</h2>
         </button>
-        <div v-show="open" @click="open = !open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+        <div v-show="open"  class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
           <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the number of subscribers for the chain
             C</button>
           <button class="hover:bg-gray-800 p-1 text-left w-full">View number of views for video V</button>
@@ -63,16 +63,16 @@
         </div>
       </div>
       <div >
-        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+        <button  class="flex w-full text-gray-300 space-x-2 px-2 py-1">
           <span v-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
           <h2>Reddit Widget</h2>
         </button>
-        <div v-show="open" @click="open = !open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+        <div v-show="open"  class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
           <button  class="hover:bg-gray-800 p-1 text-left w-full">Display of the last N posts for subreddit S</button>
         </div>
       </div>
       <div >
-        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+        <button  class="flex w-full text-gray-300 space-x-2 px-2 py-1">
           <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
           <h2>RSS Widget</h2>
         </button>
