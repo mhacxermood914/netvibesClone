@@ -38,7 +38,7 @@ app.use(cookieParser())
 //   secret: 'SECRET'
 // }));
 
-const data = ["a","rz"]
+const data = ["a", "rz"]
 // view engine setup
 app.use(expressLayouts);
 app.set("layout", "./layouts/main");
@@ -58,6 +58,7 @@ app.use('/', require('./routes'));
 app.use('/auth', require('./routes/auth'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api', require('./routes/api/users'));
+app.use('/api/widgets', require('./routes/api/widgets'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

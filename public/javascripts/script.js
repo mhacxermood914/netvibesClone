@@ -64,7 +64,7 @@ try {
     const registerForm = document.getElementById('register')
     const loginForm = document.getElementById('login')
 
-    if (registerForm || loginForm) {
+    if (registerForm) {
 
         registerForm.addEventListener('submit', (e) => {
 
@@ -126,6 +126,15 @@ try {
 
         })
 
+       
+
+    }
+
+
+    if(loginForm){
+
+        console.log({loginForm})
+        
         loginForm.addEventListener('submit', (e) => {
 
             e.preventDefault()
@@ -187,7 +196,6 @@ try {
 
 
         })
-
     }
 
 

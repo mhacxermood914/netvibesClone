@@ -1,7 +1,4 @@
-<div 
-  x-data="{ openSideBar: true}"
-  class="h-screen"
->
+<div id="app" class="h-screen">
   <!-- Nav header  -->
   <nav class="bg-gray-800 flex items-center justify-between">
     <div class="flex items-center justify-center space-x-2 text-white">
@@ -12,159 +9,106 @@
       <h2> reader</h2>
     </div>
     <div class="flex space-x-3 text-white pr-4">
-        <span class="material-icons">space_dashboard</span>
-        <div class="h-7 w-0.5 bg-gray-500"></div>
-        <h2 class="ml-">Dashboard</h2>
-        <div class="h-7 w-0.5 bg-gray-500"></div>
-        <div class="text-center flex items-center">
-          <span class="material-icons bg-green-500 p-0.5 mr-1.5">face</span>
-          John Doe
-        </div>
+      <span class="material-icons">space_dashboard</span>
+      <div class="h-7 w-0.5 bg-gray-500"></div>
+      <h2 class="ml-">Dashboard</h2>
+      <div class="h-7 w-0.5 bg-gray-500"></div>
+      <div class="text-center flex items-center">
+        <span class="material-icons bg-green-500 p-0.5 mr-1.5">face</span>
+        
+      </div>
     </div>
   </nav>
   <div class="flex h-full">
     <!-- sidebar  -->
-    <section
-    x-show="openSideBar"
-    x-transition
-     class="h-full w-80 divide-y-2 divide-gray-600 bg-gray-700 h-full"
-    >
-        <h2 class="py-6 px-2 text-3xl font-semibold text-gray-400">ZeddVibes</h2>
-        <div x-data="{ open: false, iconText: '' }">
-          <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
-            <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
-            <h2>Weather Widget</h2>
-          </button>
-          <div 
-            x-show="open" 
-            @click="open = !open" 
-            class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
-            <button class="hover:bg-gray-800 p-1 text-left w-full">Display temperature of specific city</button>
-            <!-- <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
-            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+    <section v-show="openSideBar" x-transition class="h-full w-80 divide-y-2 text-md pr-8 text-white divide-gray-600 bg-gray-700 h-full">
+      <h2 class="py-6 px-2 text-3xl font-semibold text-gray-400">ZeddVibes</h2>
+      <div>
+        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+          <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
+          <h2>Weather Widget</h2>
+        </button>
+        <div v-show="open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+          <button @click="add('Weather')" class="hover:bg-gray-800 p-1 text-left w-full">Display temperature of
+            specific city</button>
+          <!-- <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+                  <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
+                  <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button> -->
+        </div>
+      </div>
+      <div >
+        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+          <span v-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
+          <h2>Exchange Widget</h2>
+        </button>
+        <div v-show="open" @click="open = !open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+          <button @click="add('exchange_rate')" class="hover:bg-gray-800 p-1 text-left w-full">Display the exchange rate of a currency pair M1 /
+            M2</button>
+          <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the evolution of the price of an A
+            share</button>
+          <!-- <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
             <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button> -->
-          </div>
         </div>
-        <div x-data="{ open: false, iconText: '' }">
-          <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
-            <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
-            <h2>Exchange Widget</h2>
-          </button>
-          <div 
-            x-show="open" 
-            @click="open = !open" 
-            class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
-            <button class="hover:bg-gray-800 p-1 text-left w-full">Display the exchange rate of a currency pair M1 / M2</button>
-            <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the evolution of the price of an A share</button>
-            <!-- <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
-            <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button> -->
-          </div>
+      </div>
+      <div >
+        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+          <span v-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
+          <h2>Youtube Widget</h2>
+        </button>
+        <div v-show="open" @click="open = !open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+          <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the number of subscribers for the chain
+            C</button>
+          <button class="hover:bg-gray-800 p-1 text-left w-full">View number of views for video V</button>
+          <button class="hover:bg-gray-800 p-1 text-left w-full">Displaying the last N comments for video V</button>
         </div>
-        <div x-data="{ open: false, iconText: '' }">
-          <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
-            <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
-            <h2>Youtube Widget</h2>
-          </button>
-          <div 
-            x-show="open" 
-            @click="open = !open" 
-            class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
-            <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the number of subscribers for the chain C</button>
-            <button class="hover:bg-gray-800 p-1 text-left w-full">View number of views for video V</button>
-            <button class="hover:bg-gray-800 p-1 text-left w-full">Displaying the last N comments for video V</button>
-          </div>
+      </div>
+      <div >
+        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+          <span v-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
+          <h2>Reddit Widget</h2>
+        </button>
+        <div v-show="open" @click="open = !open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+          <button  class="hover:bg-gray-800 p-1 text-left w-full">Display of the last N posts for subreddit S</button>
         </div>
-        <div x-data="{ open: false, iconText: '' }">
-          <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
-            <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
-            <h2>Reddit Widget</h2>
-          </button>
-          <div x-show="open" @click="open = !open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
-            <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the last N posts for subreddit S</button>
-          </div>
+      </div>
+      <div >
+        <button @click="open = !open" class="flex w-full text-gray-300 space-x-2 px-2 py-1">
+          <span x-text="open ? 'arrow_drop_down' : 'arrow_right' " class="material-icons">arrow_right</span>
+          <h2>RSS Widget</h2>
+        </button>
+        <div v-show="open" class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
+          <button @click="add('Rss')" class="hover:bg-gray-800 p-1 text-left w-full">Display the list of the last N items for the F feed</button>
         </div>
+      </div>
     </section>
 
     <!-- content wrapper  -->
     <section class=" w-full">
       <!-- head  -->
       <div class="bg-gray-100 py-2 flex items-center space-x-3 text-xl">
-        <button @click="openSideBar = !openSideBar" class="appearance-none">
-          <span class="material-icons text-xl pl-2">menu</span>
-        </button>
-        <h2></h2>
+        <div class="flex space-x-8 items-center">
+          <button @click="openSideBar = !openSideBar" class="appearance-none">
+            <span @click="message='pppp'" class="material-icons text-xl pl-2">menu</span>
+          </button>
+        </div>
       </div>
       <!-- content  -->
-      <div class="w-full grid grid-cols-4 gap-3 p-3 ">
-        <!-- Weather Content -->
-        <div>
-          <div class=" shadow-md bg-gray-200">
-            <div class="hiddenClass">
-              <div class=""  id="weatherClass">
-                <div class="flex justify-between text-semibold border-b border-black px-2 py-2">
-                  <h1>
-                    <strong><i class="fas fa-film"></i> Weather Widget
-                  </h1></strong>
-                  <button id="removeWindowCinemaButton"><strong>X</strong></button>
-                </div>
-          
-                <form  method="POST" class="px-2 mt-2 h-24s" id="weather-form">
-  
-                  <label for="">Get Temperature display for a city V </label>
-  
-                  <input type="text" placeholder="Ex : Paris" name="cityWeather" id="cityWeather" class="my-3" required>
-  
-                  <input type="submit" value="Submit">
-  
-                </form>
-  
-                <div class="display-temperature hidden px-2 py-4">
-                </div>
-          
-              </div>
-            </div>
+      <div v-for="(item,index) in services" :key="index" class="w-full grid grid-cols-4 gap-3 p-3 ">
+        <div v-for="(instance,index) in widgetInstances" :key="index">
+          <div v-show="instance.name=='weather'">
+            <weather></weather>
+          </div>
+          <!-- RSS Widget -->
+          <div v-show="instance.name=='rss'">
+            <rss></rss>
+          </div>
+
+          <!-- Exchange Rate Widget -->
+          <div v-show="instance.name=='exchange_rate'">
+           <exchange-rate></exchange-rate>
           </div>
 
         </div>
-
-        <!-- Youtube Content -->
-        <div class="h-80 shadow-md bg-gray-200">1</div>
-        <div class="h-80 shadow-md bg-gray-200">2</div>
-
-        <!--Cinema Division-->
-
-        <div class="h-80 shadow-md bg-gray-200">
-          <div class="hiddenClass">
-            <div class="cinemaClass" id="cinemaClass">
-              <div class="flex justify-between text-semibold border-b border-black px-2 py-2">
-                <h1>
-                  <strong><i class="fas fa-film"></i> Cinema Widget</h1></strong>
-                  <button id="removeWindowCinemaButton"><strong>X</strong></button>
-              </div>
-
-              <h1 class="px-2">List of the day’s screenings for cinema C</h1>
-
-              <div>
-
-              </div>
-
-
-              <form action="/saveWidget" method="POST" class="px-2">
-                
-                
-
-              </form>
-            
-            </div>
-          </div>
-        </div>
-
-        
-        
-
-
-
-       
       </div>
     </section>
   </div>
@@ -172,21 +116,437 @@
 </div>
 <script>
 
-  const weatherForm = document.getElementById('weather-form')
+  // helpers
 
-  console.log(weatherForm)
+  var filter = function (text, length, clamp) {
+      clamp = clamp || '...';
+      var node = document.createElement('div');
+      node.innerHTML = text;
+      var content = node.textContent;
+      return content.length > length ? content.slice(0, length) + clamp : content;
+    };
 
-  if(weatherForm){
-    weatherForm.addEventListener('submit',(e)=>{
+    Vue.filter('truncate', filter);
 
-        e.preventDefault()
+  //Components
+
+
+  Vue.component('weather',{
+    template:`
+      <div class=" shadow-md bg-gray-200 my-2">
+        <div class="hiddenClass">
+          <div class="" id="weatherClass">
+            <div class="flex justify-between text-semibold border-b border-black px-2 py-2">
+              <h1>
+                <strong><i class="fas fa-film"></i> Weather Widget</strong>
+              </h1>
+              <button id="removeWindowCinemaButton"><span x-on:click="alert('Hello World!')"
+                  class="material-icons">close</span></button>
+            </div>
+
+            <form @submit.prevent="submit" method=" POST" class="weather-form px-2 mt-2 h-24s"
+              >
+
+              <label for="">Get Temperature display for a city V </label>
+
+
+
+              <input v-model="city" type="text" placeholder="Ex : Paris" name="cityWeather"
+                id="cityWeather" class="my-3 p-2 border-2 rounded-sm focus:ring-gray-3000 focus:ring-2" required>
+
+              <input class="p-2 rounded-sm bg-gray-900 text-gray-200 cursor-pointer" type="submit" value="Find">
+
+            </form>
+
+            <div ref="temperature" class=" hidden px-2 py-4">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    `,
+    data:function(){
+      return {
+        city:""
+      }
+    },
+    methods:{
+      submit(e){
+        /*Get Data*/
+        const temperature = this.$refs.temperature
+        var key = '168f9b5ea2c406ff9630d3051bbc5f73'
+        fetch("https://api.openweathermap.org/data/2.5/weather?q=" + this.city + "&appid=" + key)
+          .then(function (resp) {
+            return resp.json()
+          })
+          .then(function (data) {
+            console.log(data)
+            const country = data.sys.country
+            const temp = Math.round(parseFloat(data.main.temp) - 273.15);
+            const desc = data.weather[0].description
+            const reloadId = 'h2' + this.city
+            const first = '<h1>' + '<strong>' + this.city + ', ' + country + '</strong>' + '</h1>'
+            const second = '<h2 id="' + this.city + '" class="flex items-center"><span class="material-icons">sunny</span> ' + temp + ' °, ' + desc + '</h2>'
+
+            //temperature.classList.remove('hidden')
+            console.log(temperature)
+
+            
+
+            $(temperature).html("")
+            $(temperature).removeClass("hidden")
+
+            $(temperature).append(second)
+
+            console.log({ second })
+          })
+          .catch(function () {
+            return false
+          })
+      }
+    }
+  })
+
+  // RSS Widget Component
+
+  Vue.component("rss",{
+    
+    template:`
+       <div class="shadow-md bg-gray-200 my-2 overflow-y-auto  p-2" :class="{'h-56':arr.length>0}">
+
+         <div class="flex justify-between text-semibold border-b border-black px-2 pb-2 mb-2">
+            <h1>
+              <strong><i class="fas fa-film"></i> RSS Widget</strong>
+            </h1>
+            <button id="removeWindowCinemaButton"><span x-on:click="alert('Hello World!')"
+                class="material-icons">close</span></button>
+          </div>
+          
+          <form method="post" @submit.prevent="handleRssSubmit" id="rss-feed" class="" ref="form">
+            <input type="search" v-model="url" class="focus:outline-none w-4/5" name="uri" required>
+            <button type="submit" id="submit" class="capitalize rounded-sm bg-gray-900 text-gray-200 cursor-pointer text-lg px-2" >Add</button>
+          </form>
+
+          <div v-for="(item,index) in arr" class="my-4">
+            <div class="flex border-b bg-white rss-content">
+              <div v-if="item.image.url">
+                <img :src="item.image.url" height="140" width="140" alt="">
+              </div>
+              <div class="w-full text-xs">
+                <h2 class="border-b border-gray-400"><a :href="item.link">{{item.title | truncate(50,'...')}}</a></h2>
+                <p :inner-html.prop="item.summary | truncate(70,'...')"></p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+    `,
+    data(){
+      return {
+        arr:[],
+        length:"",
+        url:'',
+        msg:'fg'
+      }
+    },
+    methods:{
+      handleRssSubmit(e) {
+         this.msg = 'ujiuh'
+         const $this=this
+        fetch("/api/widgets/rss?uri=" + this.url)
+          .then(function (resp) {
+            return resp.json()
+          })
+          .then(function (data) {
+
+            $this.arr = Object.values(data)
+           
+
+            console.log($this.arr)
+
+            $this.length=$this.arr.length
+
+          })
+          .catch(function () {
+            return false
+          })
+      }
+    }
+  })
+
+  // Exchange Rate Component
+
+  Vue.component('exchange-rate',{
+    template:`
+      <div>
+        
+        <div class="shadow-md bg-gray-200 my-2 overflow-y-auto  p-2">
+          <div class="flex justify-between text-semibold border-b border-black px-2 pb-2 mb-2">
+            <h1>
+              <strong><i class="fas fa-film"></i> Exchange Rate Widget</strong>
+            </h1>
+            <button id="removeWindowCinemaButton"><span x-on:click="alert('Hello World!')"
+                class="material-icons">close</span></button>
+          </div>
+          <form action="" @submit.prevent="handleExchangeRateSubmit">
+            <div class="flex">
+              <input type="text" name="first_pair" :value="first_pair" class="w-1/2 mx-2" placeholder="Pair 1">
+              <input type="text" name="second_pair" :value="second_pair" class="w-1/2 mx-2" placeholder="Pair 2">
+            </div>
+            <div class="mx-2 my-2">
+              <input type="submit" value="Exchange Rate" class="capitalize  rounded-sm bg-gray-900 text-gray-200 w-full  cursor-pointer text-lg " >
+            </div>
+
+            <div ref="display_exchange_rate" v-if="rate.base_pair">
+              <h1>Exchange Rate {{first_pair}}/{{second_pair}}:{{rate.exchange_rates[first_pair]}}/{{rate.exchange_rates[second_pair]}}</h1>
+            </div>
+
+          </form>
+        </div>  
+      </div>
+    `,
+    data(){
+      return {
+        first_pair:"",
+        second_pair:"",
+        rate:{},
+      }
+    },
+    methods:{
+      handleExchangeRateSubmit(e){
+
+        this.first_pair = e.target.elements['first_pair'].value
+        this.second_pair = e.target.elements['second_pair'].value
+        const $this= this
+        fetch("http://api.exchangeratesapi.io/v1/latest?access_key=d67dc775a2021480e4640cb3405355c2&symbols="+this.first_pair+","+this.second_pair)
+          .then(function (resp) {
+            return resp.json()
+          })
+          .then(function (data) {
+
+            console.log({data})
+
+            const res = JSON.parse(JSON.stringify(data))
+
+            console.log({res})
+
+            $this.rate={
+              "base_pair":data.base,
+              "exchange_rates":JSON.parse(JSON.stringify(data.rates))
+            }
+
+          })
+          .catch(function () {
+            return false
+          })
+      }
+    }
+  })
+
+  var app = new Vue({
+      el: '#app',
+      mounted:function(){
+        if(this.services.toString()=="Weather"){
+
+          console.log("ok")
+
+         const weather_instance = {
+           name:'weather',
+           city:''
+         }
+
+         this.widgetInstances.push(weather_instance)
+
+
+        }
+
+        if (this.services.toString() == "Exchange") {
+
+          console.log("ok")
+
+          const exchange_rate_instance = {
+            name: 'exchange_rate',
+            base: "",
+            rates: {
+
+            }
+
+          }
+
+          this.widgetInstances.push(exchange_rate_instance)
+
+
+        }
+
+        if (this.services.toString() == "RSS") {
+
+          console.log("ok")
+
+          const rss_instance = {
+            name: 'rss',
+            uri: ''
+          }
+
+          this.widgetInstances.push(rss_instance)
+
+
+        }
+      },
+      data: {
+        widgetInstances: [],
+        url:'',
+        rssData:[],
+        open:true,
+        openSideBar: true,
+        services:JSON.parse(localStorage.getItem('availablesServices')).services
+      },
+      methods:{
+        add:function(widget){
+
+          if(widget=="Weather"){
+
+             const weather_instance = {
+              name: 'weather',
+              city: ''
+            }
+
+            this.widgetInstances.push(weather_instance)
+
+          }
+
+          if (widget == "Rss") {
+
+            $(this.$refs.form).removeClass('hidden')
+
+              const rss_instance = {
+                name: 'rss',
+                uri: ''
+              }
+  
+              this.widgetInstances.push(rss_instance)
+
+          }
+
+          if(widget == "exchange_rate"){
+            const exchange_rate_instance = {
+              name: 'exchange_rate',
+              base: "",
+              rates: {
+            
+              }
+
+            }
+
+            this.widgetInstances.push(exchange_rate_instance)
+          }
+
+
+        },
+        
+      },
       
-        const target = e.target
-      
-        const city = target.elements['cityWeather'].value
 
-        createWeatherWidget(city)
     })
-  }
+
+  // const handleWeatherWidget = () => ({
+  //   addInstances(widgetName=this.datas.services.toString()){
+
+  //       console.log({widgetName})
+
+  //       if(widgetName==="Weather"){
+
+  //         const weather_instance = new WeatherWidget(this.widgetInstances.length+1)
+
+  //         console.log(this.widgetInstances.length)
+    
+  //         this.widgetInstances.push(weather_instance)
+          
+  //         console.log(this.widgetInstances.length)
+          
+  //         setTimeout(() => {
+
+  //           console.log(this.$refs.display)
+  //            if (this.$refs.display)
+  //             this.$refs.display.innerHTML = this.widgetInstances[this.widgetInstances.length - 1].createWeatherWidget();
+
+  //         }, 0)
+
+          
+
+         
+    
+  //         setTimeout(()=>{
+    
+  //           this.weatherCard(this.widgetInstances.length)
+    
+  //         },500)
+  //       }
+
+  //       else if(widgetName === "rss"){
+
+
+
+  //         this.datas.services.push('Rss')
+
+  //         this.datas.services = _.uniq(this.datas.services,false)
+          
+
+          
+
+  //          const rss_instance = new RssWidget()
+
+  //          this.widgetInstances.push(rss_instance)
+
+  //          console.log(rss_instance.name)
+  //          console.log(this.widgetInstances)
+
+  //          //this.$refs.display.innerHTML = "goog"
+
+  //         if(this.$refs.form.classList.contains('hidden')){
+
+  //           this.$refs.form.classList.remove('hidden')
+
+  //         }
+
+  //         this.$refs.form.addEventListener('submit',(e)=>{
+
+  //           e.preventDefault()
+
+  //           const value = e.target.elements['uri'].value
+
+            
+            
+
+
+  //            rss_instance.createRssWidget(value,document.getElementsByClassName('rss-content'))
+
+  //           console.log({value})
+
+  //         })
+  //       }
+
+
+
+  //   },
+  //   check(item){
+  //     if(item.includes('Weather','Rss')){
+  //       console.log(this.datas.services)
+  //       return true
+  //     }
+  //   },
+  //   removeInstances(i){
+      
+  //     console.log({i})
+
+  //   },
+  //   removeWidget(widget, index) {
+  //     const copyOfServices = this.datas.services.filter((value, k) => value === widget && k === index);
+  //     this.datas = { services: copyOfServices, widget: this.datas.widget };
+  //     localStorage.setItem('availablesServices', JSON.stringify(this.datas));
+  //     console.log(this.datas)
+  //   }
+  // })
+
+  // console.log()
 
 </script>

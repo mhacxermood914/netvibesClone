@@ -1,15 +1,14 @@
-FROM node:latest
+FROM alpine:latest
 
-COPY package.json .
-
-# install node_modules 
-RUN npm install --quiet
+RUN apk add --no-cache nodejs npm
 
 # Create app directory
 WORKDIR /app
 
 COPY . /app
 
+# install node_modules 
+RUN npm install --quiet
 
 
 EXPOSE 8080

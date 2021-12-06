@@ -4,7 +4,7 @@ const { token } = require('../lib/token')
 const email_validator = require('validator')
 const validator = require('./../lib/validate')
 const axios = require('axios')
-const { google } = require('googleapis')
+const { google } = require('googleapis');
 
 
 const Login = async (req, res) => {
