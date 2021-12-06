@@ -1,8 +1,8 @@
-<div x-data="handleUser" x-effect="datas" class="flex h-screen bg-gray-200 font-roboto">
+<div x-data="handleUser"  class="flex relative h-screen bg-gray-200 font-roboto">
     <%- include('./layouts/sidebar.ejs') %>
         <div class="flex-1 flex flex-col overflow-hidden">
             <%- include('./layouts/header.ejs') %>
-                <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+                <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200" x-init="usersDatas()">
                     <div class="container mx-auto px-6 py-8">
                         <h3 class="text-gray-700 text-3xl font-medium">Manage Users</h3>
 
@@ -92,16 +92,20 @@
                                                     </td>
 
                                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                        <div x-text="user.password ? user.password : 'L'utilisateur s'est inscrit via
-                                                            Google' " class="text-sm leading-5 text-gray-900"></div>
+                                                        <template x-if="JSON.parse(JSON.stringify(user)).password!=null" >
+                                                            <span x-text="JSON.parse(JSON.stringify(user)).password"></span>
+                                                        </template>
+                                                        <template x-if="JSON.parse(JSON.stringify(user)).password==null">
+                                                            <span>L'utilisateur s'est inscrit via Google</span>
+                                                        </template>
                                                     </td>
 
                                                     <td
                                                         class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                                        <button @click="handleEditModal(user.id)" href="#"
+                                                        <button @click="handleEditModal(user.email)"
                                                             class="text-indigo-600 hover:text-indigo-900"><span
                                                                 class="material-icons">edit</span></button>
-                                                        <button @click="deleteUser(JSON.stringify(user.email))"
+                                                        <button @click="deleteUser(user.email)"
                                                             class="text-red-600 hover:text-red-900"><span
                                                                 class="material-icons">delete</span></button>
                                                     </td>
@@ -117,7 +121,8 @@
         </div>
 
         <div
-            class="modal absolute flex items-center justify-center top-0 h-0 overflow-hidden w-full bg-gray-700 bg-opacity-50 z-10">
+            x-show="showModal"
+            class="modal absolute flex items-center justify-center top-0 h-screen overflow-hidden w-full bg-gray-700 bg-opacity-50 z-10">
             <!-- Modal content -->
             <div class="modal-content w-1/4 p-4 py-6 rounded-md  bg-white">
                 <div class="flex justify-end"><span class="close cursor-pointer">&times;</span></div>
@@ -126,8 +131,8 @@
                     <form @submit.prevent="updateUser" method="post">
                         <div>
                             <label for="" class="block">E-mail</label>
-                            <input type="email" name="email" class="w-full border-2 p-2 rounded-md outline-none" />
-                            <span class="email-error-message hidden text-red-400"></span>
+                            <input type="email" x-model="newEmail" name="email" class="w-full border-2 p-2 rounded-md outline-none" />
+                            <span x-text="newEmail" class="email-error-message hidden text-red-400"></span>
                         </div>
                         <div>
                             <button @click="showModal = false"
@@ -148,13 +153,15 @@
         sidebarOpen: false,
         showModal: false,
         holdUserId: null,
+        oldEmail:"",
+        newEmail:"",
         datas: [],
-        handleEditModal(id) {
-            this.holdUserId = id;
+        handleEditModal(email) {
+            this.oldEmail = email;
             this.showModal = true;
         },
         updateUser() {
-            const data = { id: this.holdUserId }
+            const data = { email: this.oldEmail,new_email:this.newEmail }
             fetch('http://localhost:8080/api/modify/email', {
                 method: 'POST',
                 headers: {
@@ -166,12 +173,14 @@
                     return response.json()
                 })
                 .then((data) => {
+                    //console.log({data})
                     location.reload()
                 })
                 .catch(err => console.error(err));
         },
         deleteUser(email) {
             const data = { email }
+            console.log({email})
             fetch('http://localhost:8080/api/delete/user', {
                 method: 'POST',
                 headers: {
@@ -183,6 +192,7 @@
                     return response.json()
                 })
                 .then((data) => {
+                    console.log({data})
                     location.reload()
                 })
                 .catch(err => console.error(err));
@@ -195,11 +205,12 @@
                 })
                 .then((data) => {
                     this.datas = data.usersList;
+                    console.log(this.datas)
                 })
                 .catch(err => console.error(err));
         }
     });
 
-    // usersDatas()
+    //handleUser.usersDatas()
 
 </script>
