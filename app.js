@@ -38,7 +38,7 @@ app.use(cookieParser())
 //   secret: 'SECRET'
 // }));
 
-const data = ["a", "rz"]
+const data = ["a","rz"]
 // view engine setup
 app.use(expressLayouts);
 app.set("layout", "./layouts/main");

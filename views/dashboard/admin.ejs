@@ -1,4 +1,4 @@
-<div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200 font-roboto">
+<div x-data="handleUser" x-effect="datas" class="flex h-screen bg-gray-200 font-roboto">
     <%- include('./layouts/sidebar.ejs') %>
         <div class="flex-1 flex flex-col overflow-hidden">
             <%- include('./layouts/header.ejs') %>
@@ -69,7 +69,44 @@
                                         </thead>
 
                                         <tbody class="bg-white tbody">
-                                            
+                                            <template x-for="(user, index) in datas" :key="index">
+                                                <tr>
+                                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                        <div class="flex items-center">
+                                                            <div class="ml-4">
+                                                                <div x-text="user.id"
+                                                                    class="text-sm leading-5 font-medium text-gray-900">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                        <div class="flex items-center">
+                                                            <div class="ml-4">
+                                                                <div x-text="user.email"
+                                                                    class="text-sm leading-5 text-gray-500">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                        <div x-text="user.password ? user.password : 'L'utilisateur s'est inscrit via
+                                                            Google' " class="text-sm leading-5 text-gray-900"></div>
+                                                    </td>
+
+                                                    <td
+                                                        class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                                        <button @click="handleEditModal(user.id)" href="#"
+                                                            class="text-indigo-600 hover:text-indigo-900"><span
+                                                                class="material-icons">edit</span></button>
+                                                        <button @click="deleteUser(JSON.stringify(user.email))"
+                                                            class="text-red-600 hover:text-red-900"><span
+                                                                class="material-icons">delete</span></button>
+                                                    </td>
+                                                </tr>
+                                            </template>
                                         </tbody>
                                     </table>
                                 </div>
@@ -78,83 +115,91 @@
                     </div>
                 </main>
         </div>
+
+        <div
+            class="modal absolute flex items-center justify-center top-0 h-0 overflow-hidden w-full bg-gray-700 bg-opacity-50 z-10">
+            <!-- Modal content -->
+            <div class="modal-content w-1/4 p-4 py-6 rounded-md  bg-white">
+                <div class="flex justify-end"><span class="close cursor-pointer">&times;</span></div>
+
+                <div>
+                    <form @submit.prevent="updateUser" method="post">
+                        <div>
+                            <label for="" class="block">E-mail</label>
+                            <input type="email" name="email" class="w-full border-2 p-2 rounded-md outline-none" />
+                            <span class="email-error-message hidden text-red-400"></span>
+                        </div>
+                        <div>
+                            <button @click="showModal = false"
+                                class="bg-green-700 text-green-100 text-xl text-medium hover:bg-green-600 w-full p-2.5 rounded-md mt-4 text-white">Annuler</button>
+                            <button type="submit" id="register_submit"
+                                class="bg-green-700 text-green-100 text-xl text-medium hover:bg-green-600 w-full p-2.5 rounded-md mt-4 text-white">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 </div>
 
 <script>
-    function deleteUser(email){
-        const data = {email}
-        fetch('http://localhost:8080/api/delete/user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => {
-                return response.json()
+
+    const handleUser = () => ({
+        sidebarOpen: false,
+        showModal: false,
+        holdUserId: null,
+        datas: [],
+        handleEditModal(id) {
+            this.holdUserId = id;
+            this.showModal = true;
+        },
+        updateUser() {
+            const data = { id: this.holdUserId }
+            fetch('http://localhost:8080/api/modify/email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             })
-            .then((data) => {
-                location.reload()
+                .then((response) => {
+                    return response.json()
+                })
+                .then((data) => {
+                    location.reload()
+                })
+                .catch(err => console.error(err));
+        },
+        deleteUser(email) {
+            const data = { email }
+            fetch('http://localhost:8080/api/delete/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             })
-             .catch(err => console.error(err));
-    }
+                .then((response) => {
+                    return response.json()
+                })
+                .then((data) => {
+                    location.reload()
+                })
+                .catch(err => console.error(err));
+        },
+        usersDatas() {
 
+            fetch('http://localhost:8080/api/users')
+                .then((response) => {
+                    return response.json()
+                })
+                .then((data) => {
+                    this.datas = data.usersList;
+                })
+                .catch(err => console.error(err));
+        }
+    });
 
-    const usersDatas = ()=>{
-
-    fetch('http://localhost:8080/api/users')
-        .then((response) =>{
-            return response.json()
-        })
-        .then((data)=>{
-           const tbody = $('.tbody')
-            const array = data.usersList
-
-            const html = (el)=>{
-                const stream = `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                            <div class="flex items-center">
-                                <div class="ml-4">
-                                    <div class="text-sm leading-5 font-medium text-gray-900">
-                                        ${el.id}</div>
-                                </div>
-                            </div>
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                            <div class="flex items-center">
-                                <div class="ml-4">
-                                    <div class="text-sm leading-5 text-gray-500">
-                                        ${el.email}</div>
-                                </div>
-                            </div>
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                            <div class="text-sm leading-5 text-gray-900">${el.password?el.password:"L'utilisateur s'est inscrit via Google"}</div>
-                        </td>
-
-                        <td
-                            class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                            <button href="#" class="text-indigo-600 hover:text-indigo-900"><span
-                                    class="material-icons">edit</span></button>
-                            <button onclick=deleteUser(${JSON.stringify(el.email)}) class="text-red-600 hover:text-red-900"><span
-                                    class="material-icons">delete</span></button>
-                        </td>
-                    </tr>
-                `
-                
-                $(tbody).append(stream)
-
-            }
-
-            _.map(array,html);
-        })
-        .catch(err => console.error(err));
-    }
-
-    usersDatas()
+    // usersDatas()
 
 </script>
-

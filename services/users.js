@@ -33,7 +33,7 @@ const getAllUsers = async ()=>{
 }
 
 // FIXME: 
-getAllUsers().then(res => console.log(res)).catch(e => console.log(e))
+// getAllUsers().then(res => console.log(res)).catch(e => console.log(e))
 
 const getUserInfoBy = async (key, attributes = true) => {
   let res;

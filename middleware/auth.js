@@ -1,9 +1,9 @@
 module.exports = {
     // if user is authenticated the redirected to next page else redirect to login page
     ensureAuth: function (req, res, next) {
-        if(req.cookies.user){
+        if (req.cookies.user) {
             next()
-        }else{
+        } else {
             res.redirect('/')
         }
     },

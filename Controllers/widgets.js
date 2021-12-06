@@ -10,7 +10,7 @@ const RssWidget = (req, res) => {
 
         array.push(response)
 
-        if (array.length === 17) {
+        if (array.length === 8) {
             res.status(200).json(array)
         }
 
