@@ -18,7 +18,7 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - 4000:8080
+      - 8080:8080
     environment:
       - DATABASE_HOST=mysqldb
       - DATABASE_USER=root
