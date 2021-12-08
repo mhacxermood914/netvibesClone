@@ -6,17 +6,13 @@ const Widget = sequelize.define('Widget', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    value: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     userId: {
         type: DataTypes.INTEGER,
     }
 }, {
     // Other model options go here
-    modelName: 'widget',
-    timestamps:false
+    tableName: 'widget',
+    timestamps: false
 });
 
 module.exports = Widget;

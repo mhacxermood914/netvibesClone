@@ -14,7 +14,7 @@ const User = sequelize.define('User', {
     }
 }, {
     // Other model options go here
-    modelName: 'users',
+    tableName: 'users',
     timestamps:false
 });
 

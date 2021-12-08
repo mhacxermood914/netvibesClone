@@ -1,30 +1,31 @@
-version: '3.8'
+version: '3'
 
 services:
   mysqldb:
     image: mysql:5.7
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_USER_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=netvibes
     ports:
-      - 3307:3306
+      - 3306:3306
     volumes:
       - db:/var/lib/mysql
   app:
     depends_on:
       - mysqldb
-    build: ./zeddvibes-app
+    build: .
     restart: unless-stopped
     ports:
       - 4000:8080
     environment:
       - DATABASE_HOST=mysqldb
       - DATABASE_USER=root
-      - DATABASE_PASSWORD=
+      - DATABASE_PASSWORD=root
       - DATABASE=netvibes
       - DATABASE_PORT=3306
-      - TOKEN_KEY='P@ssw3rd!'
+      - TOKEN_KEY=P@ssw3rd!
       - GOOGLE_CONSUMER_KEY=1086110210869-1evr6a7neqr9vdgn5ai4dfcfc8es2pfr.apps.googleusercontent.com
       - GOOGLE_CONSUMER_SECRET=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
     stdin_open: true

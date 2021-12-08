@@ -12,6 +12,7 @@
       <span class="material-icons">space_dashboard</span>
       <div class="h-7 w-0.5 bg-gray-500"></div>
       <h2 class="ml-">Dashboard</h2>
+      <a href="/logout" class="ml-">Logout</a>
       <div class="h-7 w-0.5 bg-gray-500"></div>
       <div class="text-center flex items-center">
         <span class="material-icons bg-green-500 p-0.5 mr-1.5">face</span>
@@ -44,7 +45,7 @@
         <div v-show="open"  class="text-gray-400 text-md pl-10 border-t-2 border-gray-600">
           <button @click="add('exchange_rate')" class="hover:bg-gray-800 p-1 text-left w-full">Display the exchange rate of a currency pair M1 /
             M2</button>
-          <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the evolution of the price of an A
+          <!-- <button class="hover:bg-gray-800 p-1 text-left w-full">Display of the evolution of the price of an A -->
             share</button>
           <!-- <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button>
             <button class="hover:bg-gray-800 p-1 text-left w-full">TrendNow</button> -->
@@ -59,7 +60,7 @@
           <button @click="add('youtube_subscriber')" class="hover:bg-gray-800 p-1 text-left w-full">Display of the number of subscribers for the chain
             C</button>
           <button @click="add('youtube_video_views_counter')" class="hover:bg-gray-800 p-1 text-left w-full">View number of views for video V</button>
-          <button class="hover:bg-gray-800 p-1 text-left w-full">Displaying the last N comments for video V</button>
+          <!-- <button class="hover:bg-gray-800 p-1 text-left w-full">Displaying the last N comments for video V</button> -->
         </div>
       </div>
       <div >
@@ -93,29 +94,29 @@
         </div>
       </div>
       <!-- content  -->
-      <div v-for="(item,index) in services" :key="index" class="w-full grid grid-cols-4 gap-3 p-3 ">
+      <div  class="w-full grid grid-cols-4 gap-3 p-3 ">
         <div v-for="(instance,index) in widgetInstances" :key="index">
           <div v-show="instance.name=='weather'">
-            <weather></weather>
+            <weather :index="index" :widget-id="instance.id" ></weather>
           </div>
           <!-- RSS Widget -->
           <div v-show="instance.name=='rss'">
-            <rss></rss>
+            <rss :index="index" :widget-id="instance.id" ></rss>
           </div>
 
           <!-- Exchange Rate Widget -->
           <div v-show="instance.name=='exchange_rate'">
-           <exchange-rate></exchange-rate>
+           <exchange-rate :index="index" :widget-id="instance.id" ></exchange-rate>
           </div>
 
           <!--Youtube Subscriber Widget -->
           <div v-show="instance.name=='youtube_subscriber'">
-            <youtube-subscriber></youtube-subscriber>
+            <youtube-subscriber :index="index" :widget-id="instance.id"></youtube-subscriber>
           </div>
 
           <!-- Youtube Video Viewers Widget -->
           <div v-show="instance.name=='youtube_video_views_counter'">
-            <youtube-video-counter></youtube-video-counter>
+            <youtube-video-counter :index="index" :widget-id="instance.id" ></youtube-video-counter>
           </div>
 
         </div>
@@ -142,15 +143,16 @@
 
 
   Vue.component('weather',{
+    props:["index","widgetId"],
     template:`
-      <div class=" shadow-md bg-gray-200 my-2">
+      <div class=" shadow-md bg-gray-200 my-2" v-if="created">
         <div class="hiddenClass">
           <div class="" id="weatherClass">
             <div class="flex justify-between text-semibold border-b border-black px-2 py-2">
               <h1>
                 <strong><i class="fas fa-film"></i> Weather Widget</strong>
               </h1>
-              <button id="removeWindowCinemaButton"><span x-on:click="alert('Hello World!')"
+              <button id="removeWindowCinemaButton"><span @click="remove(index,widgetId)"
                   class="material-icons">close</span></button>
             </div>
 
@@ -177,10 +179,36 @@
     `,
     data:function(){
       return {
-        city:""
+        city:"",
+        userId:"",
+        created:true
       }
     },
+    created(){
+        this.userId = this.$parent.localData.userId
+    },
     methods:{
+      async remove(index,widgetId){
+
+        const res = await this.removeWidgetInDatabase()
+
+        this.$parent.widgetInstances = this.$parent.widgetInstances.filter((el, i) => {
+          return i != index
+        })
+
+      },
+      async removeWidgetInDatabase(){
+        const res = await fetch('/api/widgets/'+this.widgetId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+        // console.log({ res })
+
+        return res
+      },
       submit(e){
         /*Get Data*/
         const temperature = this.$refs.temperature
@@ -199,7 +227,7 @@
             const second = '<h2 id="' + this.city + '" class="flex items-center"><span class="material-icons">sunny</span> ' + temp + ' °, ' + desc + '</h2>'
 
             //temperature.classList.remove('hidden')
-            console.log(temperature)
+            // console.log(temperature)
 
             
 
@@ -208,7 +236,7 @@
 
             $(temperature).append(second)
 
-            console.log({ second })
+            // console.log({ second })
           })
           .catch(function () {
             return false
@@ -220,7 +248,7 @@
   // RSS Widget Component
 
   Vue.component("rss",{
-    
+   props: ["index", "widgetId"],
     template:`
        <div class="shadow-md bg-gray-200 my-2 overflow-y-auto  p-2" :class="{'h-56':arr.length>0}">
 
@@ -228,7 +256,7 @@
             <h1>
               <strong><i class="fas fa-film"></i> RSS Widget</strong>
             </h1>
-            <button id="removeWindowCinemaButton"><span x-on:click="alert('Hello World!')"
+            <button id="removeWindowCinemaButton"><span @click="remove(index,widgetId)"
                 class="material-icons">close</span></button>
           </div>
           
@@ -260,6 +288,27 @@
       }
     },
     methods:{
+      async remove(index) {
+        // console.log(index)
+
+        const res = await this.removeWidgetInDatabase()
+
+        this.$parent.widgetInstances = this.$parent.widgetInstances.filter((el, i) => {
+          return i != index
+        })
+      },
+      async removeWidgetInDatabase() {
+        const res = await fetch('/api/widgets/' + this.widgetId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+        // console.log({ res })
+
+        return res
+      },
       handleRssSubmit(e) {
          this.msg = 'ujiuh'
          const $this=this
@@ -272,7 +321,7 @@
             $this.arr = Object.values(data)
            
 
-            console.log($this.arr)
+            // console.log($this.arr)
 
             $this.length=$this.arr.length
 
@@ -287,6 +336,7 @@
   // Exchange Rate Component
 
   Vue.component('exchange-rate',{
+    props: ["index", "widgetId"],
     template:`
       <div>
         
@@ -295,7 +345,7 @@
             <h1>
               <strong><i class="fas fa-film"></i> Exchange Rate Widget</strong>
             </h1>
-            <button id="removeWindowCinemaButton"><span x-on:click="alert('Hello World!')"
+            <button id="removeWindowCinemaButton"><span @click="remove(index,widgetId)"
                 class="material-icons">close</span></button>
           </div>
           <form action="" @submit.prevent="handleExchangeRateSubmit">
@@ -324,6 +374,27 @@
       }
     },
     methods:{
+      async remove(index) {
+        // console.log(index)
+
+        const res = await this.removeWidgetInDatabase()
+
+        this.$parent.widgetInstances = this.$parent.widgetInstances.filter((el, i) => {
+          return i != index
+        })
+      },
+      async removeWidgetInDatabase() {
+        const res = await fetch('/api/widgets/' + this.widgetId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+        // console.log({ res })
+
+        return res
+      },
       handleExchangeRateSubmit(e){
 
         this.first_pair = e.target.elements['first_pair'].value
@@ -357,6 +428,7 @@
   // Display Number of subscriber for the chain C
 
   Vue.component('youtube-subscriber',{
+    props: ["index", "widgetId"],
     template:`
       <div>
 
@@ -365,7 +437,7 @@
             <h1>
               <strong><i class="fas fa-film"></i>Youtube Subscriber Counter Widget</strong>
             </h1>
-            <button id="removeWindowCinemaButton"><span x-on:click="alert('Hello World!')"
+            <button id="removeWindowCinemaButton"><span @click="remove(index,widgetId)"
                 class="material-icons">close</span></button>
           </div>
           <form action="" @submit.prevent="handleYoutubeSubscriberSubmit">
@@ -393,6 +465,26 @@
       }
     },
     methods:{
+      async remove(index) {
+
+        const res = await this.removeWidgetInDatabase()
+
+        this.$parent.widgetInstances = this.$parent.widgetInstances.filter((el, i) => {
+          return i != index
+        })
+      },
+      async removeWidgetInDatabase() {
+        const res = await fetch('/api/widgets/' + this.widgetId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+        console.log({ res })
+
+        return res
+      },
       handleYoutubeSubscriberSubmit(){
         const $this = this
         fetch("https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+this.channel_id+"&key="+this.youtubeApiKey)
@@ -400,8 +492,6 @@
             return resp.json()
           })
           .then(function (data) {
-
-            console.log({ data })
 
             const { statistics:{ subscriberCount } } = _.find(data.items,(e)=>{
               return e.id!=null || e.id!=undefined
@@ -422,6 +512,7 @@
   // View number of views for video V
 
   Vue.component('youtube-video-counter', {
+      props: ["index", "widgetId"],
       template: `
       <div>
 
@@ -430,7 +521,7 @@
             <h1>
               <strong><i class="fas fa-film"></i>Youtube Views Counter Widget</strong>
             </h1>
-            <button id="removeWindowCinemaButton"><span x-on:click="alert('Hello World!')"
+            <button id="removeWindowCinemaButton"><span @click="remove(index,widgetId)"
                 class="material-icons">close</span></button>
           </div>
           <form action="" @submit.prevent="handleYoutubeVideoSubmit">
@@ -458,6 +549,24 @@
         }
       },
       methods: {
+        async remove(index) {
+          const res = await this.removeWidgetInDatabase()
+          this.$parent.widgetInstances = this.$parent.widgetInstances.filter((el, i) => {
+            return i != index
+          })
+        },
+        async removeWidgetInDatabase() {
+          const res = await fetch('/api/widgets/' + this.widgetId, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          })
+
+          console.log({ res })
+
+          return res
+        },
         handleYoutubeVideoSubmit() {
           const $this = this
           fetch("https://www.googleapis.com/youtube/v3/videos?part=statistics&id=" + this.video_id + "&key=" + this.youtubeApiKey)
@@ -485,74 +594,155 @@
     })
 
 
+
   // Display the last N comments for video V
 
   var app = new Vue({
       el: '#app',
-      mounted:function(){
-        if(this.services.toString()=="Weather"){
+      created:function(){
 
-          console.log("ok")
-
-         const weather_instance = {
-           name:'weather',
-           city:''
-         }
-
-         this.widgetInstances.push(weather_instance)
-
-
-        }
-
-        if (this.services.toString() == "Exchange") {
-
-          console.log("ok")
-
-          const exchange_rate_instance = {
-            name: 'exchange_rate',
-            base: "",
-            rates: {
-
+        const getCookies = (cname)=>{
+          let name = cname + "=";
+          let decodedCookie = decodeURIComponent(document.cookie);
+          let ca = decodedCookie.split(';');
+          for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
             }
-
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
           }
+          return "";
+        }
 
-          this.widgetInstances.push(exchange_rate_instance)
+        const test = (val,id)=>{
+          console.log({id})
+          if(!localStorage.getItem("availablesServices")){
+            localStorage.setItem('availablesServices', JSON.stringify({ userId:id, services: val, widget: [] }))
+          }
+        }
 
+        const  fetchUserWidgets = async (userId)=>{
+
+          localStorage.clear()
+
+          const res = await fetch("http://localhost:8080/api/widgets/" + userId)
+
+          const { datas } = await res.json()
+
+          console.log({ datas })
+
+          const el = [...JSON.parse(JSON.stringify(datas))]
+          console.log({ el })
+
+          const array = []
+
+          el.forEach((e)=>{
+            array.push({name:e.name,id:e.id,userId:e.userId})
+            console.log(e.name)
+          })
+           test(array,userId)
 
         }
 
-        if (this.services.toString() == "RSS") {
+        const id = getCookies('userId')
+        
+        fetchUserWidgets(id)
 
-          console.log("ok")
+      },
+      beforeCreate(){
+          console.log(localStorage)
+          setTimeout(()=>{
+            console.log(localStorage.getItem("availablesServices"))
+            this.services = JSON.parse(localStorage.getItem("availablesServices"))
+          },1000)
+      },
+      mounted:function(){
 
-          const rss_instance = {
-            name: 'rss',
-            uri: ''
-          }
+          this.$nextTick(()=>{
+              // Code that will run only after the
+              // entire view has been rendered
+              setTimeout(()=>{
+                this.localData = JSON.parse(JSON.stringify(this.services))
+                const services = this.localData? this.localData.services: ""
 
-          this.widgetInstances.push(rss_instance)
+                _.map(services,(el)=>{
+                   if (el.name.includes('weather')) {
+                    const weather_instance = el
+                    this.widgetInstances.push(weather_instance)
+
+                    console.log(this.widgetInstances)
+                  }
+
+                  if (el.name.includes('exchange_rate')) {
+
+                    const exchange_rate_instance = el
+
+                    this.widgetInstances.push(exchange_rate_instance)
+                  }
+
+                  if (el.name.includes("rss")) {
+
+                    const rss_instance = el
+                    this.widgetInstances.push(rss_instance)
 
 
-        }
+                  }
+
+                  if (el.name.includes("youtube_subscriber")) {
+
+                    const youtube_subscriber_instance = el
+
+                    this.widgetInstances.push(youtube_subscriber_instance)
+
+
+                  }
+                })
+               
+    
+                
+    
+    
+              },1000)
+
+          })
       },
       data: {
         widgetInstances: [],
         url:'',
         rssData:[],
         open:true,
+        localData:"",
         openSideBar: true,
-        services:JSON.parse(localStorage.getItem('availablesServices')).services
+        services: null
       },
       methods:{
-        add:function(widget){
+        async addWidgets(widget) {
+          console.log({widget})
+          const res = await fetch('/api/widgets', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(widget),
+          })
+          const {data} = await res.json()
+          console.log({data})
+
+          return data
+        },
+        add:async function(widget){
 
           if(widget=="Weather"){
 
-             const weather_instance = {
+             const instance = {
               name: 'weather',
-              city: ''
+              userId:this.localData.userId
             }
+
+            const weather_instance = await this.addWidgets(instance)
 
             this.widgetInstances.push(weather_instance)
 
@@ -562,24 +752,23 @@
 
             $(this.$refs.form).removeClass('hidden')
 
-              const rss_instance = {
-                name: 'rss',
-                uri: ''
-              }
-  
-              this.widgetInstances.push(rss_instance)
+              const instance = {
+              name: 'rss',
+              userId: this.localData.userId
+            }
+            const rss_instance = await this.addWidgets(instance)
+
+            this.widgetInstances.push(rss_instance)
 
           }
 
           if(widget == "exchange_rate"){
             const exchange_rate_instance = {
               name: 'exchange_rate',
-              base: "",
-              rates: {
-            
-              }
-
+              userId: this.localData.userId
             }
+
+            this.addWidgets(exchange_rate_instance)
 
             this.widgetInstances.push(exchange_rate_instance)
           }
@@ -587,9 +776,11 @@
           if (widget == "youtube_subscriber") {
             const youtube_subscriber_instance = {
               name: 'youtube_subscriber',
-              youtubeChannelName: "",
+               userId: this.localData.userId
 
             }
+
+             this.addWidgets(youtube_subscriber_instance)
 
             this.widgetInstances.push(youtube_subscriber_instance)
           }
@@ -599,9 +790,11 @@
             console.log({widget})
             const youtube_video_views_counter_instance = {
               name: 'youtube_video_views_counter',
-              youtubeChannelName: "",
+               userId: this.localData.userId
 
             }
+
+            this.addWidgets(youtube_video_views_counter_instance)
 
             this.widgetInstances.push(youtube_video_views_counter_instance)
           }

@@ -1,11 +1,12 @@
 const User = require('./../models/users');
 const Widget = require('./../models/widget');
+const { Op } = require('sequelize');
 
 User.hasMany(Widget, {
   foreignKey: 'userId'
 });
 
-Widget.belongsTo(User);
+// Widget.belongsTo(User);
 
 const createUser = async ({ email, encryptedPassword, jwt }) => {
   User.create({ "email": email, "password": encryptedPassword, "token": jwt })
@@ -21,7 +22,14 @@ const deleteUser = async (user) => {
 };
 
 const getUserBy = async (key) => {
-  const res = await User.findOne({ where: { email: key } });
+  const res = await User.findOne({
+    where: {
+      [Op.or]: [
+        { id: key },
+        { email: key }
+      ]
+    }
+  });
   return res
 }
 

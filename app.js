@@ -38,7 +38,7 @@ app.use(cookieParser())
 //   secret: 'SECRET'
 // }));
 
-const data = ["a","rz"]
+const data = ["a", "rz"]
 // view engine setup
 app.use(expressLayouts);
 app.set("layout", "./layouts/main");
@@ -78,4 +78,5 @@ app.use(function (err, req, res, next) {
 
 app.listen(8080, () => {
   console.log(`Listening on port: ${8080} ...`);
+  db.sync();
 });

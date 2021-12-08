@@ -34,17 +34,17 @@ const Login = async (req, res) => {
 
     hash = JSON.parse(hash)
 
-    console.log({hash})
+    console.log({ hash })
 
     if (await compare(password, hash[0].password)) {
 
       const jwt = await token(email)
 
-      if(email==="admin@gmail.com"){
-        
+      if (email === "admin@gmail.com") {
+
         res.cookie('admin', jwt, { maxAge: 900000, httpOnly: true });
 
-      }else{
+      } else {
         res.cookie('user', jwt, { maxAge: 900000, httpOnly: true });
 
       }
@@ -52,11 +52,15 @@ const Login = async (req, res) => {
 
       console.log(req.useragent.browser)
 
-      const url = email.toString().includes('admin') ? '/admin' : '/services'
+      const url = await getRedirectionURI(email, res)
+
+
+
+
 
       console.log(url)
 
-      if (req.useragent.browser!="unknown"){
+      if (req.useragent.browser != "unknown") {
         res.writeHead(302, {
           'Location': url // This is your url which you want
         });
@@ -67,7 +71,7 @@ const Login = async (req, res) => {
 
       return res.status(200).end()
 
-    }else{
+    } else {
 
       res.statusMessage = "Password Incorrect"
 
@@ -82,6 +86,37 @@ const Login = async (req, res) => {
 
 
 };
+
+const getRedirectionURI = async (email, res) => {
+
+  //Get user id  
+
+  const { data } = await axios.post("http://127.0.0.1:8080/api/user", {
+    email
+  })
+
+  const { id } = data[0]
+
+
+  // check if user already had a widget 
+
+  const result = await axios.get("http://127.0.0.1:8080/api/widgets/" + id)
+
+  const { datas } = result.data
+
+  console.log()
+
+  // if so redirect to dashboard and load existing widgets
+
+  const url = email.toString().includes('admin') ? '/admin' : datas.length != 0 ? '/dashboard' : '/services'
+
+  // set user id in cookies
+
+  res.cookie('userId', id, { maxAge: 90000000000000000, httpOnly: false });
+
+
+  return url
+}
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CONSUMER_KEY,
@@ -203,12 +238,12 @@ const Register = async (req, res) => {
 
   //validate inputs
 
-  if (validator(data)){
+  if (validator(data)) {
 
     res.statusMessage = validator(data)
 
     return res.status(401).end();
-  } 
+  }
 
   //check if user already exists
 
@@ -217,7 +252,7 @@ const Register = async (req, res) => {
   if (oldUser) {
 
     res.statusMessage = "User Already Exist. Please Login";
-   
+
     return res.status(400).end();
   }
 
@@ -238,32 +273,32 @@ const Register = async (req, res) => {
 const getAllUsers = async (req, res, next) => {
   const usersList = await UserServices.getAllUsers()
 
-  if(!usersList){
-    return res.status(200).json({message:"There is no user in the database"})
+  if (!usersList) {
+    return res.status(200).json({ message: "There is no user in the database" })
   }
 
-  return res.status(200).json({usersList})
+  return res.status(200).json({ usersList })
 };
 
 // Au cas ou tu en auras besoin pour effectuer une action sinon le mail est unique
 
 const GetUserId = async (req, res, next) => {
 
-  const {email}=req.body
+  const { email } = req.body
 
-  if (!email_validator.isEmail(email)){
+  if (!email_validator.isEmail(email)) {
 
     return res.status(500).json('Send valid email')
 
   }
 
-  const userInstance = await UserServices.getUserInfoBy(email,'id')
+  const userInstance = await UserServices.getUserInfoBy(email, 'id')
 
   const user = JSON.stringify(userInstance)
 
-  console.log({userInstance})
+  console.log({ userInstance })
 
-  if(!userInstance){
+  if (!userInstance) {
 
     return res.status(400).json('Such user not found')
 
@@ -275,7 +310,7 @@ const GetUserId = async (req, res, next) => {
 
 const DeleteUser = async (req, res, next) => {
 
-  const {email}=req.body
+  const { email } = req.body
 
   if (!email_validator.isEmail(email)) {
 
@@ -293,18 +328,18 @@ const DeleteUser = async (req, res, next) => {
 
   const deleted = await user.destroy()
 
-  console.log({deleted})
+  console.log({ deleted })
 
   return res.status(200).json("User successfully deleted")
 };
 
 const ModifyPassword = async (req, res, next) => {
 
-  const { email,password } = req.body
+  const { email, password } = req.body
 
   const data = { email, password }
 
-  
+
 
   //validate inputs
 
@@ -326,14 +361,14 @@ const ModifyPassword = async (req, res, next) => {
   }
 
   user.update({ password: encryptedPassword })
- 
-  return res.status(200).json({password:encryptedPassword})
+
+  return res.status(200).json({ password: encryptedPassword })
 
 };
 
 const ModifyEmail = async (req, res, next) => {
 
-  const { email,new_email } = req.body
+  const { email, new_email } = req.body
 
   if (!email_validator.isEmail(email) || !email_validator.isEmail(new_email)) {
 
@@ -345,11 +380,18 @@ const ModifyEmail = async (req, res, next) => {
 
   const user = await UserServices.getUserBy(email)
 
+  const newMailUser = await UserServices.getUserBy(new_email)
+
   if (!user) {
     return res.status(200).json({ message: "There is no user with this mail in the database" })
   }
 
-  user.update({email:new_email})
+  if (!newMailUser) {
+    user.update({ email: new_email })
+  } else {
+    return res.status(500).json({ message: "There is already a user using that mail" })
+  }
+
 
   return res.status(200).json("User successfully updated the mail")
 };

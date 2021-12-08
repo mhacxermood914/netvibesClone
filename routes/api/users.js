@@ -15,7 +15,7 @@ router.get("/users", getAllUsers);
 
 // Get user id
 
-router.post('/user/:id',GetUserId)
+router.post('/user', GetUserId)
 
 // Get specific user by id
 

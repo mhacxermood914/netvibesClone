@@ -166,7 +166,7 @@ try {
 
                     if (data) {
 
-                        location.replace(data.url.includes('admin') ? '/admin' : 'services')
+                        location.replace(data.url.includes('admin') ? '/admin' : data.url.includes('dashboard')?'/dashboard':'services')
 
                     }
                 })

@@ -1,5 +1,6 @@
 const express = require("express");
 const ip = require('ip')
+const json = require('format-json')
 const { ensureAuth, ensureAdminAuth } = require('../middleware/auth')
 var router = express.Router();
 
@@ -8,39 +9,39 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express", user: null });
 });
 
-router.get('/dashboard', ensureAuth, (req, res,next) => {
+router.get('/dashboard', ensureAuth, (req, res, next) => {
   //console.log(req.cookies)
-  res.render('dashboard', { title: "Express",user: req.cookies.user?true:false})
-  
+  res.render('dashboard', { title: "Express", user: req.cookies.user ? true : false })
+
 })
 
-router.get('/services', ensureAuth, (req, res,next) => {
+router.get('/services', ensureAuth, (req, res, next) => {
   res.render('dashboard/services', { user: req.cookies.user ? true : false });
 })
 
 router.get('/admin', ensureAdminAuth, (req, res, next) => {
-  res.render('dashboard/admin', { user:true });
+  res.render('dashboard/admin', { user: true });
 })
 
 router.get('/admin/login', (req, res, next) => {
-  res.render('dashboard/login',{user:true});
+  res.render('dashboard/login', { user: true });
 })
 
-router.get('/interest', ensureAuth,  (req, res,next) => {
+router.get('/interest', ensureAuth, (req, res, next) => {
   res.render('dashboard/interest', { user: req.cookies.user ? true : false });
 })
 
-router.get('/admin', ensureAuth,  (req, res,next) => {
+router.get('/admin', ensureAuth, (req, res, next) => {
   res.render('dashboard/admin', { user: req.cookies.user ? true : false });
 })
 
-router.get('/admin/login', ensureAuth,  (req, res,next) => {
+router.get('/admin/login', ensureAuth, (req, res, next) => {
   res.render('dashboard/login', { user: req.cookies.user ? true : false });
 })
 
 router.get('/about.json', function (req, res) {
   var time = (new Date).getTime()
-  res.json({
+  const data = {
     "client": {
       "host": ip.address()
     },
@@ -64,22 +65,22 @@ router.get('/about.json', function (req, res) {
           " params ": [{
             " name ": " link ",
             " type ": " string "
-          },{
+          }, {
             " name ": " number ",
             " type ": " integer "
           }]
         }]
       }]
     }
-  })
+  }
+  res.send(json.plain(data))
 })
 
 
-// router.get("/logout", (req, res) => {
-//   req.session = null;
-//   req.logout();
-//   res.redirect("/");
-// })
+router.get("/logout", (req, res) => {
+  res.cookie('user', null, { maxAge: 0, httpOnly: true });
+  res.redirect("/");
+})
 
 // router.get("/dashboard", function (req, res, next) {
 //   console.log(req.user)

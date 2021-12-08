@@ -42,15 +42,58 @@
       next() {
         location.replace('http://localhost:8080/dashboard')
       },
-      add(selectService, index) {
-        if (!localStorage.getItem('availablesServices')) {
-          localStorage.setItem('availablesServices', JSON.stringify({ services: [selectService], widget: [] }));
-          this.selectIndex = index;
-          console.log(this.selectIndex)
+      getCookie(cname){
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
         }
+        return "";
+      },
+      clearStorage(){
+        localStorage.clear()
+      },
+      async add(selectService, index) {
+        this.clearStorage()
+
+        const id = this.getCookie('userId')
+
+        const widget = {
+          name:selectService.toLowerCase(),
+          userId:id
+        }
+
+        this.selectIndex = index;
+        
+        const res = await fetch('/api/widgets', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(widget),
+        })
+
+        console.log({res})
+
+        localStorage.setItem('redirect',true)
+
+
+
+        // if (!localStorage.getItem('availablesServices')) {
+        //   localStorage.setItem('availablesServices', JSON.stringify({ services: [selectService], widget: [] }));
+        //   this.selectIndex = index;
+        //   console.log(this.selectIndex)
+        // }
       },
       next() {
-        if (localStorage.getItem('availablesServices')) {
+        if (localStorage.getItem('redirect')) {
           location.replace('http://localhost:8080/dashboard');
         }
       }
